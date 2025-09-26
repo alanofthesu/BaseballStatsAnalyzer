@@ -38,7 +38,7 @@ public class MainCode {
 		}
 		else
 		{
-			System.out.println("hello");
+			System.out.println("hello this is alan");
 		}
 		}
 	
