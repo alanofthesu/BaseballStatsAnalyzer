@@ -38,7 +38,7 @@ public class MainCode {
 		}
 		else
 		{
-			System.out.println("butt");
+			System.out.println("hello");
 		}
 		}
 	
