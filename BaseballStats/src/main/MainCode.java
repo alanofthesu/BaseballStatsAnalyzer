@@ -24,13 +24,13 @@ public class MainCode {
 		console.close();
 		
 		if(pitchType.equals("4seam")) {
-			Parse4SeamData data = new Parse4SeamData("4seam new.csv","fastball stuff value new.csv");
+			Parse4SeamData data = new Parse4SeamData("fastball metrics BEST.csv","stuff values all BEST.csv");
 	    	System.out.print("closest pitcher match for 4seam fastball: ");
 			System.out.println(Arrays.toString(data.findClosestMatch(velocity, spinRate, hb, ivb)));
 			System.out.println("stuff value: " + data.getStuff());
 		}
 		else if (pitchType.equals("changeup")) {
-			ParseChangeupData data = new ParseChangeupData("changeup.csv","ch stuff value.csv");
+			ParseChangeupData data = new ParseChangeupData("changeup metrics BEST.csv","stuff values all BEST.csv");
 	    	System.out.print("closest pitcher match for changeup: ");
 			System.out.println(Arrays.toString(data.findClosestMatch(velocity, spinRate, hb, ivb)));
 			System.out.println("stuff value: " + data.getStuff());
