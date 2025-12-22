@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class ParseChangeupData {
+public class ParseCurveballData {
 	
 private ArrayList<String> firstNames = new ArrayList<>();
 private ArrayList<String> lastNames = new ArrayList<>();
@@ -19,11 +19,11 @@ private ArrayList<Double> stuff = new ArrayList<>();
 int minPercentdiffIndx = 0;
 
 
-public ParseChangeupData(String changeup, String ch) {
+public ParseCurveballData(String sinker, String si) {
 	
 	//scan through 4seam file
 	try {
-		Scanner sc = new Scanner(new File(changeup));
+		Scanner sc = new Scanner(new File(sinker));
 		sc.nextLine();
 
 		while (sc.hasNextLine()) {
@@ -45,12 +45,12 @@ public ParseChangeupData(String changeup, String ch) {
 	
 	//scan through stuff pitcher list and add to array
 	try {
-		Scanner sc = new Scanner(new File(ch));
+		Scanner sc = new Scanner(new File(si));
 		sc.nextLine();
 		while (sc.hasNextLine()) {
 			String line = sc.nextLine();
 			String[] columns = line.split(","); 
-			stuff.add(Double.parseDouble(columns[9]));
+			stuff.add(Double.parseDouble(columns[8]));
 			
 		}
 		sc.close();
