@@ -73,7 +73,7 @@ public class MainCode {
 		}
 		else
 		{
-			System.out.println("hello this is alan");
+			System.out.println("hello this is chriustian");
 		}
 		}
 	
