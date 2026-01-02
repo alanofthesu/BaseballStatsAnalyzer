@@ -18,6 +18,11 @@ public class Parse4SeamData {
 
 	private ArrayList<Double> stuff = new ArrayList<>();
 	int minPercentdiffIndx = 0;
+	
+    private double finalRawVeloDiff;
+    private double finalRawSpinDiff;
+    private double finalRawHBDiff;
+    private double finalRawIVBDiff;
 
     
     public Parse4SeamData(String fourSeam, String fsv) {
@@ -63,7 +68,7 @@ public class Parse4SeamData {
 }
     
     public String[] findClosestMatch(double velocity, double spinRate, double hb, double ivb){
-    	
+
     	double minTotalDiff = Double.MAX_VALUE;
     	
     	try {
@@ -72,9 +77,18 @@ public class Parse4SeamData {
 				double spinRatePercentDiff = Math.abs((spinRate - spinRates.get(i))/spinRates.get(i));
 				double hbPercentDiff = Math.abs((hb - hbs.get(i))/hbs.get(i));
 				double ivbPercentDiff = Math.abs((ivb - ivbs.get(i))/ivbs.get(i));
+				
+				double velocityRawDiff = Math.round((velocity - velocities.get(i)) * 10.0) / 10.0;
+				double spinRawDiff = Math.round((spinRate - spinRates.get(i))*10.0)/10.0;
+				double hbRawDiff   = Math.round((hb - hbs.get(i))*10.0)/10.0;
+				double ivbRawDiff  = Math.round((ivb - ivbs.get(i))*10.0)/10.0;
 
 				double totalDiff = velocityPercentDiff + spinRatePercentDiff + hbPercentDiff + ivbPercentDiff;
 				if(totalDiff < minTotalDiff) {
+					finalRawVeloDiff = velocityRawDiff;
+					finalRawSpinDiff = spinRawDiff;
+					finalRawHBDiff = hbRawDiff;
+					finalRawIVBDiff = ivbRawDiff;
 					minTotalDiff = totalDiff;
 					minPercentdiffIndx = i;
 				}
@@ -90,4 +104,25 @@ public class Parse4SeamData {
     public double getStuff() {
     	return stuff.get(minPercentdiffIndx);
     }
+    
+    public double getFinalRawVeloDiff()
+    {
+    	return finalRawVeloDiff;
+    }
+    
+    public double getFinalRawSpinDiff()
+    {
+    	return finalRawSpinDiff;
+    }
+    
+    public double getFinalRawHBDiff()
+    {
+    	return finalRawHBDiff;
+    }
+    
+    public double getFinalRawIVBDiff()
+    {
+    	return finalRawIVBDiff;
+    }
+    
 }

@@ -18,6 +18,11 @@ private ArrayList<Double> ivbs = new ArrayList<>();
 private ArrayList<Double> stuff = new ArrayList<>();
 int minPercentdiffIndx = 0;
 
+private double finalRawVeloDiff;
+private double finalRawSpinDiff;
+private double finalRawHBDiff;
+private double finalRawIVBDiff;
+
 
 public ParseCutterData(String sinker, String si) {
 	
@@ -71,11 +76,21 @@ public String[] findClosestMatch(double velocity, double spinRate, double hb, do
 			double spinRatePercentDiff = Math.abs((spinRate - spinRates.get(i))/spinRates.get(i));
 			double hbPercentDiff = Math.abs((hb - hbs.get(i))/hbs.get(i));
 			double ivbPercentDiff = Math.abs((ivb - ivbs.get(i))/ivbs.get(i));
+			
+			double velocityRawDiff = Math.round((velocity - velocities.get(i)) * 10.0) / 10.0;
+			double spinRawDiff = Math.round((spinRate - spinRates.get(i))*10.0)/10.0;
+			double hbRawDiff   = Math.round((hb - hbs.get(i))*10.0)/10.0;
+			double ivbRawDiff  = Math.round((ivb - ivbs.get(i))*10.0)/10.0;
+
 
 			double totalDiff = velocityPercentDiff + spinRatePercentDiff + hbPercentDiff + ivbPercentDiff;
 			if(totalDiff < minTotalDiff) {
 				minTotalDiff = totalDiff;
 				minPercentdiffIndx = i;
+				finalRawVeloDiff = velocityRawDiff;
+				finalRawSpinDiff = spinRawDiff;
+				finalRawHBDiff = hbRawDiff;
+				finalRawIVBDiff = ivbRawDiff;
 			}
 		}
 	} catch (Exception e) {
@@ -88,6 +103,25 @@ public String[] findClosestMatch(double velocity, double spinRate, double hb, do
 
 public double getStuff() {
 	return stuff.get(minPercentdiffIndx);
+}
+public double getFinalRawVeloDiff()
+{
+	return finalRawVeloDiff;
+}
+
+public double getFinalRawSpinDiff()
+{
+	return finalRawSpinDiff;
+}
+
+public double getFinalRawHBDiff()
+{
+	return finalRawHBDiff;
+}
+
+public double getFinalRawIVBDiff()
+{
+	return finalRawIVBDiff;
 }
 
 
