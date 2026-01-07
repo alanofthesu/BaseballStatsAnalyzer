@@ -41,10 +41,10 @@ public class ParseChangeupData {
 
             firstNames.add(columns[1].substring(0, columns[1].length() - 1));
             lastNames.add(columns[0].substring(1));
-            velocities.add(Double.parseDouble(columns[5]));
-            spinRates.add(Double.parseDouble(columns[6]));
-            hbs.add(Double.parseDouble(columns[7]));
-            ivbs.add(Double.parseDouble(columns[8]));
+            velocities.add(Double.parseDouble(columns[4]));
+            spinRates.add(Double.parseDouble(columns[5]));
+            hbs.add(Double.parseDouble(columns[6]));
+            ivbs.add(Double.parseDouble(columns[7]));
         }
         sc.close();
 

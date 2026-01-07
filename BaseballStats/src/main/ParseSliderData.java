@@ -1,128 +1,128 @@
 package main;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class ParseSliderData {
-	
-private ArrayList<String> firstNames = new ArrayList<>();
-private ArrayList<String> lastNames = new ArrayList<>();
-private ArrayList<Double> velocities = new ArrayList<>();
-private ArrayList<Double> spinRates = new ArrayList<>();
-private ArrayList<Double> hbs = new ArrayList<>();
-private ArrayList<Double> ivbs = new ArrayList<>();
 
-private ArrayList<Double> stuff = new ArrayList<>();
-int minPercentdiffIndx = 0;
+    private ArrayList<String> firstNames = new ArrayList<>();
+    private ArrayList<String> lastNames = new ArrayList<>();
+    private ArrayList<Double> velocities = new ArrayList<>();
+    private ArrayList<Double> spinRates = new ArrayList<>();
+    private ArrayList<Double> hbs = new ArrayList<>();
+    private ArrayList<Double> ivbs = new ArrayList<>();
+    private ArrayList<Double> stuff = new ArrayList<>();
 
-private double finalRawVeloDiff;
-private double finalRawSpinDiff;
-private double finalRawHBDiff;
-private double finalRawIVBDiff;
+    private int minPercentDiffIndex = 0;
 
+    private double finalRawVeloDiff;
+    private double finalRawSpinDiff;
+    private double finalRawHBDiff;
+    private double finalRawIVBDiff;
 
-public ParseSliderData(String sinker, String si) {
-	
-	//scan through 4seam file
-	try {
-		Scanner sc = new Scanner(new File(sinker));
-		sc.nextLine();
+    public ParseSliderData(String fourSeamCSV, String stuffCSV) {
 
-		while (sc.hasNextLine()) {
-			String line = sc.nextLine();
-			String[] columns = line.split(","); 
-			firstNames.add(columns[1].substring(0,columns[1].length()-1));
-			lastNames.add(columns[0].substring(1));
-			velocities.add(Double.parseDouble(columns[4]));
-			spinRates.add(Double.parseDouble(columns[5]));
-			hbs.add(Double.parseDouble(columns[6]));
-			ivbs.add(Double.parseDouble(columns[7]));
-			
-		}
-		sc.close();
-	} catch (FileNotFoundException e) {
-    System.out.println("CSV file not found!");
-    e.printStackTrace();
-	}
-	
-	//scan through stuff pitcher list and add to array
-	try {
-		Scanner sc = new Scanner(new File(si));
-		sc.nextLine();
-		while (sc.hasNextLine()) {
-			String line = sc.nextLine();
-			String[] columns = line.split(","); 
-			stuff.add(Double.parseDouble(columns[7]));
-			
-		}
-		sc.close();
-	} catch (FileNotFoundException e) {
-    System.out.println("CSV file not found!");
-    e.printStackTrace();
-	}
+        // ---------- Load 4-seam fastball data ----------
+        InputStream fourSeamStream = getClass()
+                .getClassLoader()
+                .getResourceAsStream(fourSeamCSV);
 
-}
+        if (fourSeamStream == null) {
+            throw new RuntimeException("CSV not found in resources: " + fourSeamCSV);
+        }
 
-public String[] findClosestMatch(double velocity, double spinRate, double hb, double ivb){
-	
-	double minTotalDiff = Double.MAX_VALUE;
-	
-	try {
-		for(int i = 0; i < firstNames.size(); i++) {
-			double velocityPercentDiff = Math.abs((velocity - velocities.get(i))/velocities.get(i));
-			double spinRatePercentDiff = Math.abs((spinRate - spinRates.get(i))/spinRates.get(i));
-			double hbPercentDiff = Math.abs((hb - hbs.get(i))/hbs.get(i));
-			double ivbPercentDiff = Math.abs((ivb - ivbs.get(i))/ivbs.get(i));
-			
-			double velocityRawDiff = Math.round((velocity - velocities.get(i)) * 10.0) / 10.0;
-			double spinRawDiff = Math.round((spinRate - spinRates.get(i))*10.0)/10.0;
-			double hbRawDiff   = Math.round((hb - hbs.get(i))*10.0)/10.0;
-			double ivbRawDiff  = Math.round((ivb - ivbs.get(i))*10.0)/10.0;
+        Scanner sc = new Scanner(fourSeamStream);
+        sc.nextLine(); // skip header
 
-			double totalDiff = velocityPercentDiff + spinRatePercentDiff + hbPercentDiff + ivbPercentDiff;
-			if(totalDiff < minTotalDiff) {
-				finalRawVeloDiff = velocityRawDiff;
-				finalRawSpinDiff = spinRawDiff;
-				finalRawHBDiff = hbRawDiff;
-				finalRawIVBDiff = ivbRawDiff;
-				minTotalDiff = totalDiff;
-				minPercentdiffIndx = i;
-			}
-		}
-	} catch (Exception e) {
-        System.out.println("nice butt");
-		e.printStackTrace();
-	}
-	
-	return new String[] {firstNames.get(minPercentdiffIndx),lastNames.get(minPercentdiffIndx)};
-}
+        while (sc.hasNextLine()) {
+            String line = sc.nextLine();
+            String[] columns = line.split(",");
 
-public double getStuff() {
-	return stuff.get(minPercentdiffIndx);
-}
+            firstNames.add(columns[1].substring(0, columns[1].length() - 1));
+            lastNames.add(columns[0].substring(1));
+            velocities.add(Double.parseDouble(columns[4]));
+            spinRates.add(Double.parseDouble(columns[5]));
+            hbs.add(Double.parseDouble(columns[6]));
+            ivbs.add(Double.parseDouble(columns[7]));
+        }
+        sc.close();
 
-public double getFinalRawVeloDiff()
-{
-	return finalRawVeloDiff;
-}
+        // ---------- Load Stuff+ CSV ----------
+        InputStream stuffStream = getClass()
+                .getClassLoader()
+                .getResourceAsStream(stuffCSV);
 
-public double getFinalRawSpinDiff()
-{
-	return finalRawSpinDiff;
-}
+        if (stuffStream == null) {
+            throw new RuntimeException("CSV not found in resources: " + stuffCSV);
+        }
 
-public double getFinalRawHBDiff()
-{
-	return finalRawHBDiff;
-}
+        sc = new Scanner(stuffStream);
+        sc.nextLine(); // skip header
 
-public double getFinalRawIVBDiff()
-{
-	return finalRawIVBDiff;
-}
+        while (sc.hasNextLine()) {
+            String line = sc.nextLine();
+            String[] columns = line.split(",");
+            stuff.add(Double.parseDouble(columns[7]));
+        }
+        sc.close();
 
+        // ---------- Safety check ----------
+        if (firstNames.isEmpty() || stuff.isEmpty()) {
+            throw new IllegalStateException("CSV data failed to load correctly");
+        }
+    }
 
+    public String[] findClosestMatch(double velocity, double spinRate, double hb, double ivb) {
+
+        double minTotalDiff = Double.MAX_VALUE;
+
+        for (int i = 0; i < firstNames.size(); i++) {
+
+            double velocityPercentDiff = Math.abs((velocity - velocities.get(i)) / velocities.get(i));
+            double spinRatePercentDiff = Math.abs((spinRate - spinRates.get(i)) / spinRates.get(i));
+            double hbPercentDiff = Math.abs((hb - hbs.get(i)) / hbs.get(i));
+            double ivbPercentDiff = Math.abs((ivb - ivbs.get(i)) / ivbs.get(i));
+
+            double totalDiff = velocityPercentDiff
+                             + spinRatePercentDiff
+                             + hbPercentDiff
+                             + ivbPercentDiff;
+
+            if (totalDiff < minTotalDiff) {
+                minTotalDiff = totalDiff;
+                minPercentDiffIndex = i;
+
+                finalRawVeloDiff = Math.round((velocity - velocities.get(i)) * 10.0) / 10.0;
+                finalRawSpinDiff = Math.round((spinRate - spinRates.get(i)) * 10.0) / 10.0;
+                finalRawHBDiff   = Math.round((hb - hbs.get(i)) * 10.0) / 10.0;
+                finalRawIVBDiff  = Math.round((ivb - ivbs.get(i)) * 10.0) / 10.0;
+            }
+        }
+
+        return new String[] {
+                firstNames.get(minPercentDiffIndex),
+                lastNames.get(minPercentDiffIndex)
+        };
+    }
+
+    public double getStuff() {
+        return stuff.get(minPercentDiffIndex);
+    }
+
+    public double getFinalRawVeloDiff() {
+        return finalRawVeloDiff;
+    }
+
+    public double getFinalRawSpinDiff() {
+        return finalRawSpinDiff;
+    }
+
+    public double getFinalRawHBDiff() {
+        return finalRawHBDiff;
+    }
+
+    public double getFinalRawIVBDiff() {
+        return finalRawIVBDiff;
+    }
 }
