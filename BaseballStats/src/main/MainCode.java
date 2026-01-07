@@ -1,420 +1,211 @@
 package main;
+
 import java.util.Arrays;
 import java.util.Scanner;
 
-
 public class MainCode {
-	
-	public static void main(String[] args) {
-		
-		Scanner console = new Scanner(System.in);
-		System.out.println("pitch type (4seam, sinker, cutter, splitter, slider, curveball, changeup): ");
-		String pitchType = console.nextLine();
-		System.out.println("velocity: ");
-		Double velocity = Double.parseDouble(console.nextLine());
-		System.out.println("spin rate: ");
-		Double spinRate = Double.parseDouble(console.nextLine());
-		System.out.println("h-break (flip sign): ");
-		Double hb = Double.parseDouble(console.nextLine());
-		System.out.println("ivb: ");
-		Double ivb = Double.parseDouble(console.nextLine());
-		
-		System.out.println("velocity: " + velocity + "\nspin rate: " + spinRate + "\nh-break: " + hb + "\nivb: "+ivb);
-		console.close();
-		
-		if(pitchType.equals("4seam")) {
-			Parse4SeamData data = new Parse4SeamData("fastball metrics BEST.csv","fangraphs stuff all - fangraphs stuff all.csv");
-	    	System.out.print("closest pitcher match for 4seam fastball: ");
-			System.out.println(Arrays.toString(data.findClosestMatch(velocity, spinRate, hb, ivb)));
-			System.out.println("stuff value: " + data.getStuff());
-			if (data.getFinalRawVeloDiff() < 0)
-			{
-				System.out.println("Your velocity is " + Math.abs(data.getFinalRawVeloDiff()) + " MPH less");
-			}
-			else if(data.getFinalRawVeloDiff() == 0)
-			{
-				System.out.println("Velocities are equal!");
-			}
-			else {
-				System.out.println("Your velocity is " + Math.abs(data.getFinalRawVeloDiff()) + " MPH more");
 
-			}
-			if (data.getFinalRawSpinDiff() < 0)
-			{
-				System.out.println("Your spin rate is " + Math.abs(data.getFinalRawSpinDiff()) + " RPM less");
-			}
-			else if(data.getFinalRawSpinDiff() == 0)
-			{
-				System.out.println("Spin rates are equal!");
-			}
-			else {
-				System.out.println("Your spin rate is " + Math.abs(data.getFinalRawSpinDiff()) + " RPM more");
+    public static void main(String[] args) {
 
-			}
-			if (data.getFinalRawHBDiff() < 0)
-			{
-				System.out.println("Your HB is " + Math.abs(data.getFinalRawHBDiff()) + " inches less");
-			}
-			else if(data.getFinalRawHBDiff() == 0)
-			{
-				System.out.println("HB is equal!");
-			}
-			else {
-				System.out.println("Your HB is " + Math.abs(data.getFinalRawHBDiff()) + " inches more");
+        Scanner console = new Scanner(System.in);
+        boolean keepRunning = true;
 
-			}
-			if (data.getFinalRawIVBDiff() < 0)
-			{
-				System.out.println("Your IVB is " + Math.abs(data.getFinalRawIVBDiff()) + " inches less");
-			}
-			else if(data.getFinalRawIVBDiff() == 0)
-			{
-				System.out.println("IVB is equal!");
-			}
-			else {
-				System.out.println("Your IVB is " + Math.abs(data.getFinalRawIVBDiff()) + " inches more");
+        System.out.println("Welcome to the Pitch Analyzer!");
 
-			}
+        while (keepRunning) {
+            System.out.println("\nEnter pitch type (4seam, sinker, cutter, splitter, slider, curveball, changeup)");
+            System.out.println("Or type 'quit' to exit:");
+            String pitchType = console.nextLine().trim();
 
-		}
-		else if (pitchType.equals("changeup")) {
-			ParseChangeupData data = new ParseChangeupData("changeup metrics BEST.csv","fangraphs stuff all - fangraphs stuff all.csv");
-	    	System.out.print("closest pitcher match for changeup: ");
-			System.out.println(Arrays.toString(data.findClosestMatch(velocity, spinRate, hb, ivb)));
-			System.out.println("stuff value: " + data.getStuff());
-			if (data.getFinalRawVeloDiff() < 0)
-			{
-				System.out.println("Your velocity is " + Math.abs(data.getFinalRawVeloDiff()) + " MPH less");
-			}
-			else if(data.getFinalRawVeloDiff() == 0)
-			{
-				System.out.println("Velocities are equal!");
-			}
-			else {
-				System.out.println("Your velocity is " + Math.abs(data.getFinalRawVeloDiff()) + " MPH more");
+            if (pitchType.equalsIgnoreCase("quit")) {
+                keepRunning = false;
+                break;
+            }
 
-			}
-			if (data.getFinalRawSpinDiff() < 0)
-			{
-				System.out.println("Your spin rate is " + Math.abs(data.getFinalRawSpinDiff()) + " RPM less");
-			}
-			else if(data.getFinalRawSpinDiff() == 0)
-			{
-				System.out.println("Spin rates are equal!");
-			}
-			else {
-				System.out.println("Your spin rate is " + Math.abs(data.getFinalRawSpinDiff()) + " RPM more");
+            System.out.println("velocity: ");
+            double velocity = Double.parseDouble(console.nextLine());
 
-			}
-			if (data.getFinalRawHBDiff() < 0)
-			{
-				System.out.println("Your HB is " + Math.abs(data.getFinalRawHBDiff()) + " inches less");
-			}
-			else if(data.getFinalRawHBDiff() == 0)
-			{
-				System.out.println("HB is equal!");
-			}
-			else {
-				System.out.println("Your HB is " + Math.abs(data.getFinalRawHBDiff()) + " inches more");
+            System.out.println("spin rate: ");
+            double spinRate = Double.parseDouble(console.nextLine());
 
-			}
-			if (data.getFinalRawIVBDiff() < 0)
-			{
-				System.out.println("Your IVB is " + Math.abs(data.getFinalRawIVBDiff()) + " inches less");
-			}
-			else if(data.getFinalRawIVBDiff() == 0)
-			{
-				System.out.println("IVB is equal!");
-			}
-			else {
-				System.out.println("Your IVB is " + Math.abs(data.getFinalRawIVBDiff()) + " inches more");
+            System.out.println("h-break (flip sign): ");
+            double hb = Double.parseDouble(console.nextLine());
 
-			}
-		
-		}
-		else if (pitchType.equals("sinker")) {
-			ParseSinkerData data = new ParseSinkerData("12_21 pitch data 5 measurements - sinker.csv","fangraphs stuff all - fangraphs stuff all.csv");
-	    	System.out.print("closest pitcher match for sinker: ");
-			System.out.println(Arrays.toString(data.findClosestMatch(velocity, spinRate, hb, ivb)));
-			System.out.println("stuff value: " + data.getStuff());
-			if (data.getFinalRawVeloDiff() < 0)
-			{
-				System.out.println("Your velocity is " + Math.abs(data.getFinalRawVeloDiff()) + " MPH less");
-			}
-			else if(data.getFinalRawVeloDiff() == 0)
-			{
-				System.out.println("Velocities are equal!");
-			}
-			else {
-				System.out.println("Your velocity is " + Math.abs(data.getFinalRawVeloDiff()) + " MPH more");
+            System.out.println("ivb: ");
+            double ivb = Double.parseDouble(console.nextLine());
 
-			}
-			if (data.getFinalRawSpinDiff() < 0)
-			{
-				System.out.println("Your spin rate is " + Math.abs(data.getFinalRawSpinDiff()) + " RPM less");
-			}
-			else if(data.getFinalRawSpinDiff() == 0)
-			{
-				System.out.println("Spin rates are equal!");
-			}
-			else {
-				System.out.println("Your spin rate is " + Math.abs(data.getFinalRawSpinDiff()) + " RPM more");
+            System.out.println("\nYour inputs:");
+            System.out.println("velocity: " + velocity);
+            System.out.println("spin rate: " + spinRate);
+            System.out.println("h-break: " + hb);
+            System.out.println("ivb: " + ivb);
 
-			}
-			if (data.getFinalRawHBDiff() < 0)
-			{
-				System.out.println("Your HB is " + Math.abs(data.getFinalRawHBDiff()) + " inches less");
-			}
-			else if(data.getFinalRawHBDiff() == 0)
-			{
-				System.out.println("HB is equal!");
-			}
-			else {
-				System.out.println("Your HB is " + Math.abs(data.getFinalRawHBDiff()) + " inches more");
+            // =============================
+            // Process based on pitch type
+            // =============================
+            if (pitchType.equalsIgnoreCase("4seam")) {
+                Parse4SeamData data = new Parse4SeamData(
+                        "fastball metrics BEST.csv",
+                        "fangraphs stuff all - fangraphs stuff all.csv"
+                );
+                System.out.print("closest pitcher match for 4seam fastball: ");
+                System.out.println(Arrays.toString(data.findClosestMatch(velocity, spinRate, hb, ivb)));
+                System.out.println("stuff value: " + data.getStuff());
 
-			}
-			if (data.getFinalRawIVBDiff() < 0)
-			{
-				System.out.println("Your IVB is " + Math.abs(data.getFinalRawIVBDiff()) + " inches less");
-			}
-			else if(data.getFinalRawIVBDiff() == 0)
-			{
-				System.out.println("IVB is equal!");
-			}
-			else {
-				System.out.println("Your IVB is " + Math.abs(data.getFinalRawIVBDiff()) + " inches more");
+                printDifferences(
+                        data.getFinalRawVeloDiff(),
+                        data.getFinalRawSpinDiff(),
+                        data.getFinalRawHBDiff(),
+                        data.getFinalRawIVBDiff()
+                );
 
-			}
-			
-		
-		}
-		else if (pitchType.equals("cutter")) {
-			ParseCutterData data = new ParseCutterData("12_21 pitch data 5 measurements - cutter.csv","fangraphs stuff all - fangraphs stuff all.csv");
-	    	System.out.print("closest pitcher match for cutter: ");
-			System.out.println(Arrays.toString(data.findClosestMatch(velocity, spinRate, hb, ivb)));
-			System.out.println("stuff value: " + data.getStuff());
-			if (data.getFinalRawVeloDiff() < 0)
-			{
-				System.out.println("Your velocity is " + Math.abs(data.getFinalRawVeloDiff()) + " MPH less");
-			}
-			else if(data.getFinalRawVeloDiff() == 0)
-			{
-				System.out.println("Velocities are equal!");
-			}
-			else {
-				System.out.println("Your velocity is " + Math.abs(data.getFinalRawVeloDiff()) + " MPH more");
+            } else if (pitchType.equalsIgnoreCase("changeup")) {
+                ParseChangeupData data = new ParseChangeupData(
+                        "changeup metrics BEST.csv",
+                        "fangraphs stuff all - fangraphs stuff all.csv"
+                );
+                System.out.print("closest pitcher match for changeup: ");
+                System.out.println(Arrays.toString(data.findClosestMatch(velocity, spinRate, hb, ivb)));
+                System.out.println("stuff value: " + data.getStuff());
 
-			}
-			if (data.getFinalRawSpinDiff() < 0)
-			{
-				System.out.println("Your spin rate is " + Math.abs(data.getFinalRawSpinDiff()) + " RPM less");
-			}
-			else if(data.getFinalRawSpinDiff() == 0)
-			{
-				System.out.println("Spin rates are equal!");
-			}
-			else {
-				System.out.println("Your spin rate is " + Math.abs(data.getFinalRawSpinDiff()) + " RPM more");
+                printDifferences(
+                        data.getFinalRawVeloDiff(),
+                        data.getFinalRawSpinDiff(),
+                        data.getFinalRawHBDiff(),
+                        data.getFinalRawIVBDiff()
+                );
 
-			}
-			if (data.getFinalRawHBDiff() < 0)
-			{
-				System.out.println("Your HB is " + Math.abs(data.getFinalRawHBDiff()) + " inches less");
-			}
-			else if(data.getFinalRawHBDiff() == 0)
-			{
-				System.out.println("HB is equal!");
-			}
-			else {
-				System.out.println("Your HB is " + Math.abs(data.getFinalRawHBDiff()) + " inches more");
+            } else if (pitchType.equalsIgnoreCase("sinker")) {
+                ParseSinkerData data = new ParseSinkerData(
+                        "12_21 pitch data 5 measurements - sinker.csv",
+                        "fangraphs stuff all - fangraphs stuff all.csv"
+                );
+                System.out.print("closest pitcher match for sinker: ");
+                System.out.println(Arrays.toString(data.findClosestMatch(velocity, spinRate, hb, ivb)));
+                System.out.println("stuff value: " + data.getStuff());
 
-			}
-			if (data.getFinalRawIVBDiff() < 0)
-			{
-				System.out.println("Your IVB is " + Math.abs(data.getFinalRawIVBDiff()) + " inches less");
-			}
-			else if(data.getFinalRawIVBDiff() == 0)
-			{
-				System.out.println("IVB is equal!");
-			}
-			else {
-				System.out.println("Your IVB is " + Math.abs(data.getFinalRawIVBDiff()) + " inches more");
+                printDifferences(
+                        data.getFinalRawVeloDiff(),
+                        data.getFinalRawSpinDiff(),
+                        data.getFinalRawHBDiff(),
+                        data.getFinalRawIVBDiff()
+                );
 
-			}
-			
-		}
-		else if (pitchType.equals("splitter")) {
-			ParseSplitterData data = new ParseSplitterData("12_21 pitch data 5 measurements - splitter.csv","fangraphs stuff all - fangraphs stuff all.csv");
-	    	System.out.print("closest pitcher match for splitter: ");
-			System.out.println(Arrays.toString(data.findClosestMatch(velocity, spinRate, hb, ivb)));
-			System.out.println("stuff value: " + data.getStuff());
-			if (data.getFinalRawVeloDiff() < 0)
-			{
-				System.out.println("Your velocity is " + Math.abs(data.getFinalRawVeloDiff()) + " MPH less");
-			}
-			else if(data.getFinalRawVeloDiff() == 0)
-			{
-				System.out.println("Velocities are equal!");
-			}
-			else {
-				System.out.println("Your velocity is " + Math.abs(data.getFinalRawVeloDiff()) + " MPH more");
+            } else if (pitchType.equalsIgnoreCase("cutter")) {
+                ParseCutterData data = new ParseCutterData(
+                        "12_21 pitch data 5 measurements - cutter.csv",
+                        "fangraphs stuff all - fangraphs stuff all.csv"
+                );
+                System.out.print("closest pitcher match for cutter: ");
+                System.out.println(Arrays.toString(data.findClosestMatch(velocity, spinRate, hb, ivb)));
+                System.out.println("stuff value: " + data.getStuff());
 
-			}
-			if (data.getFinalRawSpinDiff() < 0)
-			{
-				System.out.println("Your spin rate is " + Math.abs(data.getFinalRawSpinDiff()) + " RPM less");
-			}
-			else if(data.getFinalRawSpinDiff() == 0)
-			{
-				System.out.println("Spin rates are equal!");
-			}
-			else {
-				System.out.println("Your spin rate is " + Math.abs(data.getFinalRawSpinDiff()) + " RPM more");
+                printDifferences(
+                        data.getFinalRawVeloDiff(),
+                        data.getFinalRawSpinDiff(),
+                        data.getFinalRawHBDiff(),
+                        data.getFinalRawIVBDiff()
+                );
 
-			}
-			if (data.getFinalRawHBDiff() < 0)
-			{
-				System.out.println("Your HB is " + Math.abs(data.getFinalRawHBDiff()) + " inches less");
-			}
-			else if(data.getFinalRawHBDiff() == 0)
-			{
-				System.out.println("HB is equal!");
-			}
-			else {
-				System.out.println("Your HB is " + Math.abs(data.getFinalRawHBDiff()) + " inches more");
+            } else if (pitchType.equalsIgnoreCase("splitter")) {
+                ParseSplitterData data = new ParseSplitterData(
+                        "12_21 pitch data 5 measurements - splitter.csv",
+                        "fangraphs stuff all - fangraphs stuff all.csv"
+                );
+                System.out.print("closest pitcher match for splitter: ");
+                System.out.println(Arrays.toString(data.findClosestMatch(velocity, spinRate, hb, ivb)));
+                System.out.println("stuff value: " + data.getStuff());
 
-			}
-			if (data.getFinalRawIVBDiff() < 0)
-			{
-				System.out.println("Your IVB is " + Math.abs(data.getFinalRawIVBDiff()) + " inches less");
-			}
-			else if(data.getFinalRawIVBDiff() == 0)
-			{
-				System.out.println("IVB is equal!");
-			}
-			else {
-				System.out.println("Your IVB is " + Math.abs(data.getFinalRawIVBDiff()) + " inches more");
+                printDifferences(
+                        data.getFinalRawVeloDiff(),
+                        data.getFinalRawSpinDiff(),
+                        data.getFinalRawHBDiff(),
+                        data.getFinalRawIVBDiff()
+                );
 
-			}
-		
-		}
-		else if (pitchType.equals("slider")) {
-			ParseSliderData data = new ParseSliderData("12_21 pitch data 5 measurements - slider.csv","fangraphs stuff all - fangraphs stuff all.csv");
-	    	System.out.print("closest pitcher match for slider: ");
-			System.out.println(Arrays.toString(data.findClosestMatch(velocity, spinRate, hb, ivb)));
-			System.out.println("stuff value: " + data.getStuff());
-			if (data.getFinalRawVeloDiff() < 0)
-			{
-				System.out.println("Your velocity is " + Math.abs(data.getFinalRawVeloDiff()) + " MPH less");
-			}
-			else if(data.getFinalRawVeloDiff() == 0)
-			{
-				System.out.println("Velocities are equal!");
-			}
-			else {
-				System.out.println("Your velocity is " + Math.abs(data.getFinalRawVeloDiff()) + " MPH more");
+            } else if (pitchType.equalsIgnoreCase("slider")) {
+                ParseSliderData data = new ParseSliderData(
+                        "12_21 pitch data 5 measurements - slider.csv",
+                        "fangraphs stuff all - fangraphs stuff all.csv"
+                );
+                System.out.print("closest pitcher match for slider: ");
+                System.out.println(Arrays.toString(data.findClosestMatch(velocity, spinRate, hb, ivb)));
+                System.out.println("stuff value: " + data.getStuff());
 
-			}
-			if (data.getFinalRawSpinDiff() < 0)
-			{
-				System.out.println("Your spin rate is " + Math.abs(data.getFinalRawSpinDiff()) + " RPM less");
-			}
-			else if(data.getFinalRawSpinDiff() == 0)
-			{
-				System.out.println("Spin rates are equal!");
-			}
-			else {
-				System.out.println("Your spin rate is " + Math.abs(data.getFinalRawSpinDiff()) + " RPM more");
+                printDifferences(
+                        data.getFinalRawVeloDiff(),
+                        data.getFinalRawSpinDiff(),
+                        data.getFinalRawHBDiff(),
+                        data.getFinalRawIVBDiff()
+                );
 
-			}
-			if (data.getFinalRawHBDiff() < 0)
-			{
-				System.out.println("Your HB is " + Math.abs(data.getFinalRawHBDiff()) + " inches less");
-			}
-			else if(data.getFinalRawHBDiff() == 0)
-			{
-				System.out.println("HB is equal!");
-			}
-			else {
-				System.out.println("Your HB is " + Math.abs(data.getFinalRawHBDiff()) + " inches more");
+            } else if (pitchType.equalsIgnoreCase("curveball")) {
+                ParseCurveballData data = new ParseCurveballData(
+                        "12_21 pitch data 5 measurements - curveball.csv",
+                        "fangraphs stuff all - fangraphs stuff all.csv"
+                );
+                System.out.print("closest pitcher match for curveball: ");
+                System.out.println(Arrays.toString(data.findClosestMatch(velocity, spinRate, hb, ivb)));
+                System.out.println("stuff value: " + data.getStuff());
 
-			}
-			if (data.getFinalRawIVBDiff() < 0)
-			{
-				System.out.println("Your IVB is " + Math.abs(data.getFinalRawIVBDiff()) + " inches less");
-			}
-			else if(data.getFinalRawIVBDiff() == 0)
-			{
-				System.out.println("IVB is equal!");
-			}
-			else {
-				System.out.println("Your IVB is " + Math.abs(data.getFinalRawIVBDiff()) + " inches more");
+                printDifferences(
+                        data.getFinalRawVeloDiff(),
+                        data.getFinalRawSpinDiff(),
+                        data.getFinalRawHBDiff(),
+                        data.getFinalRawIVBDiff()
+                );
 
-			}
-		
-		}
-		else if (pitchType.equals("curveball")) {
-			ParseCurveballData data = new ParseCurveballData("12_21 pitch data 5 measurements - curveball.csv","fangraphs stuff all - fangraphs stuff all.csv");
-	    	System.out.print("closest pitcher match for curveball: ");
-			System.out.println(Arrays.toString(data.findClosestMatch(velocity, spinRate, hb, ivb)));
-			System.out.println("stuff value: " + data.getStuff());
-			if (data.getFinalRawVeloDiff() < 0)
-			{
-				System.out.println("Your velocity is " + Math.abs(data.getFinalRawVeloDiff()) + " MPH less");
-			}
-			else if(data.getFinalRawVeloDiff() == 0)
-			{
-				System.out.println("Velocities are equal!");
-			}
-			else {
-				System.out.println("Your velocity is " + Math.abs(data.getFinalRawVeloDiff()) + " MPH more");
+            } else {
+                System.out.println("Unknown pitch type. Please try again.");
+            }
 
-			}
-			if (data.getFinalRawSpinDiff() < 0)
-			{
-				System.out.println("Your spin rate is " + Math.abs(data.getFinalRawSpinDiff()) + " RPM less");
-			}
-			else if(data.getFinalRawSpinDiff() == 0)
-			{
-				System.out.println("Spin rates are equal!");
-			}
-			else {
-				System.out.println("Your spin rate is " + Math.abs(data.getFinalRawSpinDiff()) + " RPM more");
+            System.out.println("\n--- Run another pitch or type 'quit' to exit ---");
+        }
 
-			}
-			if (data.getFinalRawHBDiff() < 0)
-			{
-				System.out.println("Your HB is " + Math.abs(data.getFinalRawHBDiff()) + " inches less");
-			}
-			else if(data.getFinalRawHBDiff() == 0)
-			{
-				System.out.println("HB is equal!");
-			}
-			else {
-				System.out.println("Your HB is " + Math.abs(data.getFinalRawHBDiff()) + " inches more");
+        // Program is ending
+        System.out.println("\nExiting program. Press Enter to close.");
+        console.nextLine(); // wait for final Enter
+        console.close();
+    }
 
-			}
-			if (data.getFinalRawIVBDiff() < 0)
-			{
-				System.out.println("Your IVB is " + Math.abs(data.getFinalRawIVBDiff()) + " inches less");
-			}
-			else if(data.getFinalRawIVBDiff() == 0)
-			{
-				System.out.println("IVB is equal!");
-			}
-			else {
-				System.out.println("Your IVB is " + Math.abs(data.getFinalRawIVBDiff()) + " inches more");
+    // =============================
+    // Helper method to print differences
+    // =============================
+    private static void printDifferences(double veloDiff, double spinDiff, double hbDiff, double ivbDiff) {
+        // Velocity
+        if (veloDiff < 0) {
+            System.out.println("Your velocity is " + Math.abs(veloDiff) + " MPH less");
+        } else if (veloDiff == 0) {
+            System.out.println("Velocities are equal!");
+        } else {
+            System.out.println("Your velocity is " + Math.abs(veloDiff) + " MPH more");
+        }
 
-			}
-		
-		}
-		else
-		{
-			System.out.println("hello this is chriustian3");
-			System.out.println("hello this is christian again");
-		}
-		}
-	
-	
+        // Spin rate
+        if (spinDiff < 0) {
+            System.out.println("Your spin rate is " + Math.abs(spinDiff) + " RPM less");
+        } else if (spinDiff == 0) {
+            System.out.println("Spin rates are equal!");
+        } else {
+            System.out.println("Your spin rate is " + Math.abs(spinDiff) + " RPM more");
+        }
 
+        // H-break
+        if (hbDiff < 0) {
+            System.out.println("Your HB is " + Math.abs(hbDiff) + " inches less");
+        } else if (hbDiff == 0) {
+            System.out.println("HB is equal!");
+        } else {
+            System.out.println("Your HB is " + Math.abs(hbDiff) + " inches more");
+        }
+
+        // IVB
+        if (ivbDiff < 0) {
+            System.out.println("Your IVB is " + Math.abs(ivbDiff) + " inches less");
+        } else if (ivbDiff == 0) {
+            System.out.println("IVB is equal!");
+        } else {
+            System.out.println("Your IVB is " + Math.abs(ivbDiff) + " inches more");
+        }
+    }
 }
