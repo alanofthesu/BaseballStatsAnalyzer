@@ -26,22 +26,28 @@ public class MainCode {
                 double spinRate = readDouble(console, "spin rate: ");
                 double hb = readDouble(console, "h-break (flip sign): ");
                 double ivb = readDouble(console, "ivb: ");
+                
+                // Ask for pitcher handedness
+                System.out.print("Is this a right-handed pitcher? (yes/no): ");
+                String handedness = console.nextLine().trim().toLowerCase();
+                boolean isRHP = handedness.equals("yes") || handedness.equals("y");
 
                 System.out.println("\nYour inputs:");
                 System.out.println("velocity: " + velocity);
                 System.out.println("spin rate: " + spinRate);
                 System.out.println("h-break: " + hb);
                 System.out.println("ivb: " + ivb);
+                System.out.println("handedness: " + (isRHP ? "Right-handed" : "Left-handed"));
 
                 // Process pitch
                 switch (pitchType.toLowerCase()) {
-                    case "4seam" -> run4Seam(velocity, spinRate, hb, ivb);
-                    case "changeup" -> runChangeup(velocity, spinRate, hb, ivb);
-                    case "sinker" -> runSinker(velocity, spinRate, hb, ivb);
-                    case "cutter" -> runCutter(velocity, spinRate, hb, ivb);
-                    case "splitter" -> runSplitter(velocity, spinRate, hb, ivb);
-                    case "slider" -> runSlider(velocity, spinRate, hb, ivb);
-                    case "curveball" -> runCurveball(velocity, spinRate, hb, ivb);
+                    case "4seam" -> run4Seam(velocity, spinRate, hb, ivb, pitchType, isRHP);
+                    case "changeup" -> runChangeup(velocity, spinRate, hb, ivb, pitchType, isRHP);
+                    case "sinker" -> runSinker(velocity, spinRate, hb, ivb, pitchType, isRHP);
+                    case "cutter" -> runCutter(velocity, spinRate, hb, ivb, pitchType, isRHP);
+                    case "splitter" -> runSplitter(velocity, spinRate, hb, ivb, pitchType, isRHP);
+                    case "slider" -> runSlider(velocity, spinRate, hb, ivb, pitchType, isRHP);
+                    case "curveball" -> runCurveball(velocity, spinRate, hb, ivb, pitchType, isRHP);
                     default -> System.out.println("Unknown pitch type. Please try again.");
                 }
 
@@ -76,7 +82,7 @@ public class MainCode {
     // ================================
     // Pitch type processing methods
     // ================================
-    private static void run4Seam(double velocity, double spinRate, double hb, double ivb) {
+    private static void run4Seam(double velocity, double spinRate, double hb, double ivb, String pitchType, boolean isRHP) {
         try {
             Parse4SeamData data = new Parse4SeamData(
                     "fastball metrics BEST.csv",
@@ -85,12 +91,14 @@ public class MainCode {
             String[] match = data.findClosestMatch(velocity, spinRate, hb, ivb);
             String pitcherName = String.join(" ", match);
 
-            System.out.print("\nClosest pitcher match for changeup:");
+            System.out.print("\nClosest pitcher match for 4seam: ");
             System.out.println(pitcherName);
             System.out.println("His FanGraphs Stuff+ score for the same pitch: " + data.getStuff());
-            PersonalStuffCalc personal = new PersonalStuffCalc(velocity, spinRate, hb, ivb);
+            
+            PersonalStuffCalc personal = new PersonalStuffCalc(velocity, spinRate, hb, ivb, pitchType, isRHP);
             System.out.println("Your Stuff+ score for the same pitch: " + personal.CalculateStuff());
-            System.out.println("\nCompared to" + pitcherName + ":");
+            
+            System.out.println("\nCompared to " + pitcherName + ":");
             printDifferences(
                     data.getFinalRawVeloDiff(),
                     data.getFinalRawSpinDiff(),
@@ -102,7 +110,7 @@ public class MainCode {
         }
     }
 
-    private static void runChangeup(double velocity, double spinRate, double hb, double ivb) {
+    private static void runChangeup(double velocity, double spinRate, double hb, double ivb, String pitchType, boolean isRHP) {
         try {
             ParseChangeupData data = new ParseChangeupData(
                     "changeup metrics BEST.csv",
@@ -111,10 +119,14 @@ public class MainCode {
             String[] match = data.findClosestMatch(velocity, spinRate, hb, ivb);
             String pitcherName = String.join(" ", match);
 
-            System.out.print("\nClosest pitcher match for changeup:");
+            System.out.print("\nClosest pitcher match for changeup: ");
             System.out.println(pitcherName);
             System.out.println("His FanGraphs Stuff+ score for the same pitch: " + data.getStuff());
-            System.out.println("\nCompared to" + pitcherName + ":");
+            
+            PersonalStuffCalc personal = new PersonalStuffCalc(velocity, spinRate, hb, ivb, pitchType, isRHP);
+            System.out.println("Your Stuff+ score for the same pitch: " + personal.CalculateStuff());
+            
+            System.out.println("\nCompared to " + pitcherName + ":");
             printDifferences(
                     data.getFinalRawVeloDiff(),
                     data.getFinalRawSpinDiff(),
@@ -126,7 +138,7 @@ public class MainCode {
         }
     }
 
-    private static void runSinker(double velocity, double spinRate, double hb, double ivb) {
+    private static void runSinker(double velocity, double spinRate, double hb, double ivb, String pitchType, boolean isRHP) {
         try {
             ParseSinkerData data = new ParseSinkerData(
                     "12_21 pitch data 5 measurements - sinker.csv",
@@ -135,10 +147,14 @@ public class MainCode {
             String[] match = data.findClosestMatch(velocity, spinRate, hb, ivb);
             String pitcherName = String.join(" ", match);
 
-            System.out.print("\nClosest pitcher match for changeup:");
+            System.out.print("\nClosest pitcher match for sinker: ");
             System.out.println(pitcherName);
             System.out.println("His FanGraphs Stuff+ score for the same pitch: " + data.getStuff());
-            System.out.println("\nCompared to" + pitcherName + ":");
+            
+            PersonalStuffCalc personal = new PersonalStuffCalc(velocity, spinRate, hb, ivb, pitchType, isRHP);
+            System.out.println("Your Stuff+ score for the same pitch: " + personal.CalculateStuff());
+            
+            System.out.println("\nCompared to " + pitcherName + ":");
             printDifferences(
                     data.getFinalRawVeloDiff(),
                     data.getFinalRawSpinDiff(),
@@ -150,7 +166,7 @@ public class MainCode {
         }
     }
 
-    private static void runCutter(double velocity, double spinRate, double hb, double ivb) {
+    private static void runCutter(double velocity, double spinRate, double hb, double ivb, String pitchType, boolean isRHP) {
         try {
             ParseCutterData data = new ParseCutterData(
                     "12_21 pitch data 5 measurements - cutter.csv",
@@ -159,10 +175,14 @@ public class MainCode {
             String[] match = data.findClosestMatch(velocity, spinRate, hb, ivb);
             String pitcherName = String.join(" ", match);
 
-            System.out.print("\nClosest pitcher match for changeup:");
+            System.out.print("\nClosest pitcher match for cutter: ");
             System.out.println(pitcherName);
             System.out.println("His FanGraphs Stuff+ score for the same pitch: " + data.getStuff());
-            System.out.println("\nCompared to" + pitcherName + ":");
+            
+            PersonalStuffCalc personal = new PersonalStuffCalc(velocity, spinRate, hb, ivb, pitchType, isRHP);
+            System.out.println("Your Stuff+ score for the same pitch: " + personal.CalculateStuff());
+            
+            System.out.println("\nCompared to " + pitcherName + ":");
             printDifferences(
                     data.getFinalRawVeloDiff(),
                     data.getFinalRawSpinDiff(),
@@ -174,7 +194,7 @@ public class MainCode {
         }
     }
 
-    private static void runSplitter(double velocity, double spinRate, double hb, double ivb) {
+    private static void runSplitter(double velocity, double spinRate, double hb, double ivb, String pitchType, boolean isRHP) {
         try {
             ParseSplitterData data = new ParseSplitterData(
                     "12_21 pitch data 5 measurements - splitter.csv",
@@ -183,10 +203,14 @@ public class MainCode {
             String[] match = data.findClosestMatch(velocity, spinRate, hb, ivb);
             String pitcherName = String.join(" ", match);
 
-            System.out.print("\nClosest pitcher match for changeup:");
+            System.out.print("\nClosest pitcher match for splitter: ");
             System.out.println(pitcherName);
             System.out.println("His FanGraphs Stuff+ score for the same pitch: " + data.getStuff());
-            System.out.println("\nCompared to" + pitcherName + ":");
+            
+            PersonalStuffCalc personal = new PersonalStuffCalc(velocity, spinRate, hb, ivb, pitchType, isRHP);
+            System.out.println("Your Stuff+ score for the same pitch: " + personal.CalculateStuff());
+            
+            System.out.println("\nCompared to " + pitcherName + ":");
             printDifferences(
                     data.getFinalRawVeloDiff(),
                     data.getFinalRawSpinDiff(),
@@ -198,7 +222,7 @@ public class MainCode {
         }
     }
 
-    private static void runSlider(double velocity, double spinRate, double hb, double ivb) {
+    private static void runSlider(double velocity, double spinRate, double hb, double ivb, String pitchType, boolean isRHP) {
         try {
             ParseSliderData data = new ParseSliderData(
                     "12_21 pitch data 5 measurements - slider.csv",
@@ -207,10 +231,14 @@ public class MainCode {
             String[] match = data.findClosestMatch(velocity, spinRate, hb, ivb);
             String pitcherName = String.join(" ", match);
 
-            System.out.print("\nClosest pitcher match for changeup:");
+            System.out.print("\nClosest pitcher match for slider: ");
             System.out.println(pitcherName);
             System.out.println("His FanGraphs Stuff+ score for the same pitch: " + data.getStuff());
-            System.out.println("\nCompared to" + pitcherName + ":");
+            
+            PersonalStuffCalc personal = new PersonalStuffCalc(velocity, spinRate, hb, ivb, pitchType, isRHP);
+            System.out.println("Your Stuff+ score for the same pitch: " + personal.CalculateStuff());
+            
+            System.out.println("\nCompared to " + pitcherName + ":");
             printDifferences(
                     data.getFinalRawVeloDiff(),
                     data.getFinalRawSpinDiff(),
@@ -222,7 +250,7 @@ public class MainCode {
         }
     }
 
-    private static void runCurveball(double velocity, double spinRate, double hb, double ivb) {
+    private static void runCurveball(double velocity, double spinRate, double hb, double ivb, String pitchType, boolean isRHP) {
         try {
             ParseCurveballData data = new ParseCurveballData(
                     "12_21 pitch data 5 measurements - curveball.csv",
@@ -231,12 +259,14 @@ public class MainCode {
             String[] match = data.findClosestMatch(velocity, spinRate, hb, ivb);
             String pitcherName = String.join(" ", match);
 
-            System.out.print("\nClosest pitcher match for changeup:");
+            System.out.print("\nClosest pitcher match for curveball: ");
             System.out.println(pitcherName);
             System.out.println("His FanGraphs Stuff+ score for the same pitch: " + data.getStuff());
-            PersonalStuffCalc personal = new PersonalStuffCalc(velocity, spinRate, hb, ivb);
             
-            System.out.println("\nCompared to" + pitcherName + ":");
+            PersonalStuffCalc personal = new PersonalStuffCalc(velocity, spinRate, hb, ivb, pitchType, isRHP);
+            System.out.println("Your Stuff+ score for the same pitch: " + personal.CalculateStuff());
+            
+            System.out.println("\nCompared to " + pitcherName + ":");
             printDifferences(
                     data.getFinalRawVeloDiff(),
                     data.getFinalRawSpinDiff(),
@@ -264,6 +294,4 @@ public class MainCode {
         System.out.println(ivbDiff < 0 ? "Your IVB is " + Math.abs(ivbDiff) + " inches less"
                 : ivbDiff == 0 ? "IVB is equal!" : "Your IVB is " + Math.abs(ivbDiff) + " inches more");
     }
-  
- 
 }
